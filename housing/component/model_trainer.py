@@ -9,8 +9,6 @@ from housing.util.util import load_numpy_array_data,save_object,load_object
 from housing.entity.model_factory import MetricInfoArtifact, ModelFactory,GridSearchedBestModel
 from housing.entity.model_factory import evaluate_regression_model
 
-
-
 class HousingEstimatorModel:
     def __init__(self, preprocessing_object, trained_model_object):
         """
@@ -37,10 +35,7 @@ class HousingEstimatorModel:
         return f"{type(self.trained_model_object).__name__}()"
 
 
-
-
 class ModelTrainer:
-
     def __init__(self, model_trainer_config:ModelTrainerConfig, data_transformation_artifact: DataTransformationArtifact):
         try:
             logging.info(f"{'>>' * 30}Model trainer log started.{'<<' * 30} ")
@@ -61,14 +56,12 @@ class ModelTrainer:
 
             logging.info(f"Splitting training and testing input and target feature")
             x_train,y_train,x_test,y_test = train_array[:,:-1],train_array[:,-1],test_array[:,:-1],test_array[:,-1]
-            
 
             logging.info(f"Extracting model config file path")
             model_config_file_path = self.model_trainer_config.model_config_file_path
 
             logging.info(f"Initializing model factory class using above model config file: {model_config_file_path}")
             model_factory = ModelFactory(model_config_path=model_config_file_path)
-            
             
             base_accuracy = self.model_trainer_config.base_accuracy
             logging.info(f"Expected accuracy: {base_accuracy}")
@@ -90,12 +83,10 @@ class ModelTrainer:
             preprocessing_obj=  load_object(file_path=self.data_transformation_artifact.preprocessed_object_file_path)
             model_object = metric_info.model_object
 
-
             trained_model_file_path=self.model_trainer_config.trained_model_file_path
             housing_model = HousingEstimatorModel(preprocessing_object=preprocessing_obj,trained_model_object=model_object)
             logging.info(f"Saving model at path: {trained_model_file_path}")
             save_object(file_path=trained_model_file_path,obj=housing_model)
-
 
             model_trainer_artifact=  ModelTrainerArtifact(is_trained=True,message="Model Trained successfully",
             trained_model_file_path=trained_model_file_path,
@@ -104,7 +95,6 @@ class ModelTrainer:
             train_accuracy=metric_info.train_accuracy,
             test_accuracy=metric_info.test_accuracy,
             model_accuracy=metric_info.model_accuracy
-            
             )
 
             logging.info(f"Model Trainer Artifact: {model_trainer_artifact}")
@@ -114,8 +104,6 @@ class ModelTrainer:
 
     def __del__(self):
         logging.info(f"{'>>' * 30}Model trainer log completed.{'<<' * 30} ")
-
-
 
 #loading transformed training and testing datset
 #reading model config file 
